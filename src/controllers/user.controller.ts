@@ -1,0 +1,3 @@
+import { Request,Response,NextFunction } from 'express';
+import { UserService } from '../services/user.service'; import { sendSuccess } from '../utils/response';
+export class UserController { private service=new UserService(); create=async(req:Request,res:Response,next:NextFunction)=>{try{sendSuccess(res,201,'User account created',await this.service.create(req.body,req.auth!.userId,res.locals.requestId))}catch(e){next(e)}}; assignRole=async(req:Request,res:Response,next:NextFunction)=>{try{sendSuccess(res,200,'Role updated; user must authenticate again',await this.service.assignRole(req.params.id,req.body.role,req.auth!.userId,res.locals.requestId))}catch(e){next(e)}} }

@@ -1,0 +1,2 @@
+import { AppDataSource } from '../config/data-source'; import { AuditLog } from '../entities/audit-log.entity';
+export class AuditService { static async record(actorUserId: string | null, action: string, resourceType: string, resourceId: string | null, requestId: string | undefined) { await AppDataSource.getRepository(AuditLog).save({ actorUserId, action, resourceType, resourceId, requestId: requestId ?? null }); } }

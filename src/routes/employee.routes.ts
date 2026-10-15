@@ -1,0 +1,5 @@
+import { Router } from 'express'; import { EmployeeController } from '../controllers/employee.controller'; import { authenticate } from '../middlewares/authenticate'; import { requireRole } from '../middlewares/authorize'; import { validateBody, validateParams, validateQuery } from '../middlewares/validate-request'; import { employeeCreateSchema, employeeUpdateSchema, ownProfileSchema, uuidParam, listEmployeeQuery } from '../validators/common.schemas';
+const router=Router(),c=new EmployeeController(); router.use(authenticate);
+router.get('/me',c.me); router.patch('/me',validateBody(ownProfileSchema),c.updateMe);
+router.get('/',validateQuery(listEmployeeQuery),c.list); router.get('/:id',validateParams(uuidParam),c.get);
+router.post('/',requireRole('admin','hr'),validateBody(employeeCreateSchema),c.create); router.patch('/:id',requireRole('admin','hr'),validateParams(uuidParam),validateBody(employeeUpdateSchema),c.update); router.delete('/:id',requireRole('admin','hr'),validateParams(uuidParam),c.deactivate); export default router;
